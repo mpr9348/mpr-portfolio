@@ -3,8 +3,8 @@
 
 @font-face {
   font-family: 'Bebas Neue';
-  src: url('../src/BebasNeue.woff2') format('woff2'),
-       url('../src/BebasNeue.woff') format('woff');
+  src: url('/BebasNeue.woff2') format('woff2'),
+       url('/BebasNeue.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -13,15 +13,15 @@
 
 @font-face {
   font-family: 'Bebas Neue';
-  src: url('./BebasNeue-Bold.woff') format('woff');
+  src: url('/BebasNeue-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Bebas Neue Book';
-  src: url('../src/BebasNeue-Book.woff2') format('woff2'),
-       url('../src/BebasNeue-Book.woff') format('woff');
+  src: url('/BebasNeue-Book.woff2') format('woff2'),
+       url('/BebasNeue-Book.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
