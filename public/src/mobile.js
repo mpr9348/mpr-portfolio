@@ -61,7 +61,7 @@ const rowSpeeds = [0.01, -0.015, 0.01];
 const totalImagesPerRow = gridCols * duplicateFactor;
 
 
-const shadowTexture = textureLoader.load('/shadow.png');
+const shadowTexture = textureLoader.load('/na/shadow.png');
 
 
 const rowGroups = [];
