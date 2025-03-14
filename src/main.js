@@ -248,7 +248,7 @@ setTimeout(() => {
       });
     }
   });
-}, 750); // .75-second delay
+}, 300); // delay by a third of a sec so u can let images load
 
 function loadLottieAnimation() {
   const animationContainer = document.getElementById('lottie-animation');

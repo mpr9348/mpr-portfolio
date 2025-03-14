@@ -126,53 +126,55 @@ for (let i = 1; i <= gridRows * gridCols; i++) {
   );
 }
 
-// Animation setup
-const animationStartTime = Date.now();
-const rowDelay = 333;
-const animationDuration = 1500;
-const bounceDuration = 9000;
+// Delay everything by 300ms
+setTimeout(() => {
+  const animationStartTime = Date.now();
+  const rowDelay = 333;
+  const animationDuration = 1500;
+  const bounceDuration = 9000;
 
-function animate() {
-  requestAnimationFrame(animate);
+  function animate() {
+    requestAnimationFrame(animate);
 
-  const elapsedTime = Date.now() - animationStartTime;
+    const elapsedTime = Date.now() - animationStartTime;
 
-  rowGroups.forEach((group, index) => {
-    const groupStartTime = index * rowDelay;
+    rowGroups.forEach((group, index) => {
+      const groupStartTime = index * rowDelay;
 
-    if (elapsedTime > groupStartTime) {
-      group.visible = true;
-      const progress = Math.min((elapsedTime - groupStartTime) / animationDuration, 1);
-      const bounceProgress = Math.min((elapsedTime - groupStartTime) / bounceDuration, 1);
-      const easedProgress = 1 - Math.pow(1 - progress, 3);
-      const bounceEffect = Math.pow(0.9, bounceProgress * 3) * Math.sin(bounceProgress * 5 * Math.PI) * 0.01;
+      if (elapsedTime > groupStartTime) {
+        group.visible = true;
+        const progress = Math.min((elapsedTime - groupStartTime) / animationDuration, 1);
+        const bounceProgress = Math.min((elapsedTime - groupStartTime) / bounceDuration, 1);
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+        const bounceEffect = Math.pow(0.9, bounceProgress * 3) * Math.sin(bounceProgress * 5 * Math.PI) * 0.01;
 
-      group.rotation.y = THREE.MathUtils.lerp(Math.PI / 3, 0, easedProgress) + bounceEffect;
-      group.position.z = THREE.MathUtils.lerp(0, -50, easedProgress) + bounceEffect;
+        group.rotation.y = THREE.MathUtils.lerp(Math.PI / 3, 0, easedProgress) + bounceEffect;
+        group.position.z = THREE.MathUtils.lerp(0, -50, easedProgress) + bounceEffect;
 
-      group.children.forEach((child) => {
-        if (child.material) {
-          child.material.opacity = Math.min(easedProgress, 1); // Clamp opacity to 1
-        }
+        group.children.forEach((child) => {
+          if (child.material) {
+            child.material.opacity = Math.min(easedProgress, 1); // Clamp opacity to 1
+          }
 
-        // Move images horizontally
-        const totalWidth = gridCols * (planeWidth + spacing) * duplicateFactor;
-        child.position.x += rowSpeeds[index];
+          // Move images horizontally
+          const totalWidth = gridCols * (planeWidth + spacing) * duplicateFactor;
+          child.position.x += rowSpeeds[index];
 
-        // Wrap images around when they go off-screen
-        if (child.position.x > totalWidth / 2) {
-          child.position.x -= totalWidth;
-        } else if (child.position.x < -totalWidth / 2) {
-          child.position.x += totalWidth;
-        }
-      });
-    }
-  });
+          // Wrap images around when they go off-screen
+          if (child.position.x > totalWidth / 2) {
+            child.position.x -= totalWidth;
+          } else if (child.position.x < -totalWidth / 2) {
+            child.position.x += totalWidth;
+          }
+        });
+      }
+    });
 
-  renderer.render(scene, camera);
-}
+    renderer.render(scene, camera);
+  }
 
-animate();
+  animate(); // Start the animation loop after the delay
+}, 300); // 300ms delay
 
 // Handle window resize
 window.addEventListener('resize', () => {
