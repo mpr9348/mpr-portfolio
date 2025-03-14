@@ -163,92 +163,86 @@ for (let i = 1; i <= gridRows * gridCols; i++) {
 }
 
 
-// Delay everything by 1.5 seconds
-setTimeout(() => {
-  const animationStartTime = Date.now();
-  const rowDelay = 333; // Delay between rows
-  const animationDuration = 1500; // Duration of the animation
-  const bounceDuration = 9000; // Duration of the bounce effect
+const animationStartTime = Date.now();
+const rowDelay = 333; 
+const animationDuration = 1500; 
+const bounceDuration = 9000; 
 
-  // Hover effect variables
-  const raycaster = new THREE.Raycaster();
-  const mouse = new THREE.Vector2();
-  let intersectedObject = null;
-  const scaleFactorOnHover = 1.1;
-  const hoverStartTime = 2000;
 
-  function animate() {
-    requestAnimationFrame(animate);
 
-    const elapsedTime = Date.now() - animationStartTime;
 
-    rowGroups.forEach((group, index) => {
-      const groupStartTime = index * rowDelay;
+function animate() {
+  requestAnimationFrame(animate);
 
-      if (elapsedTime > groupStartTime) {
-        group.visible = true;
-        const progress = Math.min((elapsedTime - groupStartTime) / animationDuration, 1);
-        const bounceProgress = Math.min((elapsedTime - groupStartTime) / bounceDuration, 1);
-        const easedProgress = 1 - Math.pow(1 - progress, 3);
-        const bounceEffect = Math.pow(0.9, bounceProgress * 3) * Math.sin(bounceProgress * 5 * Math.PI) * 0.01;
+  const elapsedTime = Date.now() - animationStartTime;
 
-        group.rotation.y = THREE.MathUtils.lerp(Math.PI / 3, 0, easedProgress) + bounceEffect;
-        group.position.z = THREE.MathUtils.lerp(0, -50, easedProgress) + bounceEffect;
+  rowGroups.forEach((group, index) => {
+    const groupStartTime = index * rowDelay;
 
-        group.children.forEach((child) => {
-          if (child.material) {
-            child.material.opacity = easedProgress;
-          }
+    if (elapsedTime > groupStartTime) {
+      group.visible = true;
+      const progress = Math.min((elapsedTime - groupStartTime) / animationDuration, 1);
+      const bounceProgress = Math.min((elapsedTime - groupStartTime) / bounceDuration, 1);
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      const bounceEffect = Math.pow(0.9, bounceProgress * 3) * Math.sin(bounceProgress * 5 * Math.PI) * 0.01;
 
-          const totalWidth = gridCols * (planeWidth + spacing) * duplicateFactor;
-          child.position.x += rowSpeeds[index];
+      group.rotation.y = THREE.MathUtils.lerp(Math.PI / 3, 0, easedProgress) + bounceEffect;
+      group.position.z = THREE.MathUtils.lerp(0, -50, easedProgress) + bounceEffect;
 
-          if (child.position.x > totalWidth / 2) {
-            child.position.x -= totalWidth;
-          } else if (child.position.x < -totalWidth / 2) {
-            child.position.x += totalWidth;
-          }
-        });
-      }
-    });
-
-    // Hover effect logic
-    if (elapsedTime > hoverStartTime) {
-      if (window.scrollY >= window.innerHeight - 10) return;
-
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(scene.children, true);
-
-      if (intersects.length > 0 && intersects[0].object.name === "Image") {
-        if (intersectedObject !== intersects[0].object) {
-          if (intersectedObject) intersectedObject.scale.set(1, 1, 1); // Reset previous hovered object
-          intersectedObject = intersects[0].object;
-          intersectedObject.scale.set(scaleFactorOnHover, scaleFactorOnHover, 1); // Scale hovered object
+      group.children.forEach((child) => {
+        if (child.material) {
+          child.material.opacity = easedProgress;
         }
-      } else if (intersectedObject) {
-        intersectedObject.scale.set(1, 1, 1); // Reset if no intersection
-        intersectedObject = null;
-      }
-    }
 
-    renderer.render(scene, camera);
+        
+        const totalWidth = gridCols * (planeWidth + spacing) * duplicateFactor;
+        child.position.x += rowSpeeds[index];
+
+        if (child.position.x > totalWidth / 2) {
+          child.position.x -= totalWidth;
+        } else if (child.position.x < -totalWidth / 2) {
+          child.position.x += totalWidth;
+        }
+      });
+    }
+  });
+
+  
+  if (elapsedTime > hoverStartTime) {
+    
+    if (window.scrollY >= window.innerHeight - 10) return;
+
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children, true);
+
+    if (intersects.length > 0 && intersects[0].object.name === "Image") {
+      if (intersectedObject !== intersects[0].object) {
+        if (intersectedObject) intersectedObject.scale.set(1, 1, 1); 
+        intersectedObject = intersects[0].object;
+        intersectedObject.scale.set(scaleFactorOnHover, scaleFactorOnHover, 1);
+      }
+    } else if (intersectedObject) {
+      intersectedObject.scale.set(1, 1, 1); 
+      intersectedObject = null;
+    }
   }
 
-  animate(); // Start the animation loop after the delay
-
-  // Click event listener for scrolling
   window.addEventListener("click", (event) => {
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(scene.children, true);
 
     if (intersects.length > 0 && intersects[0].object.name === "Image") {
       window.scrollTo({
-        top: window.innerHeight,
-        behavior: "smooth",
+        top: window.innerHeight, 
+        behavior: "smooth", 
       });
     }
   });
-}, 300); // delay by a third of a sec so u can let images load
+
+  renderer.render(scene, camera);
+}
+
+animate();
 
 function loadLottieAnimation() {
   const animationContainer = document.getElementById('lottie-animation');
