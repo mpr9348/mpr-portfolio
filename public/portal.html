@@ -21,15 +21,20 @@
         color: white; /* Set default text color to white */
       }
 
+      /* Style for the name link */
       .name-link {
         position: absolute;
         top: 10px;
         left: 10px;
         font-size: 18px;
-        margin-bottom: 0px;
         text-decoration: none;
-        color: white; /* Explicitly set to white */
+        color: black; /* Default link color */
         font-weight: bold;
+      }
+
+      /* Override link color for the subpage */
+      body.subpage-dark .name-link {
+        color: white; /* Set link color to white */
       }
 
       .video-container {
@@ -112,7 +117,8 @@
     </style>
   </head>
   <body>
-    <a href="/" class="name-link">Matt Ritter</a>
+    <body class="subpage-dark"> <!-- Add the class here -->
+      <a href="/" class="name-link">Matt Ritter</a>
 
     <div class="title-container">
       <h1>Portal</h1>
