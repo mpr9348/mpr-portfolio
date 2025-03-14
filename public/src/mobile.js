@@ -1,79 +1,70 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.146.0';
 
-window.history.scrollRestoration = "manual"; 
+// Disable scroll restoration and reset scroll position on load
+window.history.scrollRestoration = "manual";
 window.addEventListener("load", () => {
   setTimeout(() => {
     window.scrollTo(0, 0);
-  }, 10); 
+  }, 10);
 });
 
-
+// Remove background canvas if it exists
 const bgCanvas = document.getElementById('bg');
 if (bgCanvas) {
-  bgCanvas.remove(); 
+  bgCanvas.remove();
 }
 
-
+// Function to create a rounded rectangle shape
 function createRoundedRectShape(width, height, radius) {
   const shape = new THREE.Shape();
-
-  shape.moveTo(-width / 2 + radius, -height / 2); 
-  shape.lineTo(width / 2 - radius, -height / 2); 
-  shape.quadraticCurveTo(width / 2, -height / 2, width / 2, -height / 2 + radius); 
-  shape.lineTo(width / 2, height / 2 - radius); 
-  shape.quadraticCurveTo(width / 2, height / 2, width / 2 - radius, height / 2); 
-  shape.lineTo(-width / 2 + radius, height / 2); 
-  shape.quadraticCurveTo(-width / 2, height / 2, -width / 2, height / 2 - radius); 
-  shape.lineTo(-width / 2, -height / 2 + radius); 
-  shape.quadraticCurveTo(-width / 2, -height / 2, -width / 2 + radius, -height / 2); 
-
+  shape.moveTo(-width / 2 + radius, -height / 2);
+  shape.lineTo(width / 2 - radius, -height / 2);
+  shape.quadraticCurveTo(width / 2, -height / 2, width / 2, -height / 2 + radius);
+  shape.lineTo(width / 2, height / 2 - radius);
+  shape.quadraticCurveTo(width / 2, height / 2, width / 2 - radius, height / 2);
+  shape.lineTo(-width / 2 + radius, height / 2);
+  shape.quadraticCurveTo(-width / 2, height / 2, -width / 2, height / 2 - radius);
+  shape.lineTo(-width / 2, -height / 2 + radius);
+  shape.quadraticCurveTo(-width / 2, -height / 2, -width / 2 + radius, -height / 2);
   return shape;
 }
 
-
+// Set up the main scene, camera, and renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(6, -33.42, -30);
 camera.rotation.set(0.77, 0.1, 0.09);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setClearColor(0x000000, 0); 
+renderer.setClearColor(0x000000, 0);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-
 const textureLoader = new THREE.TextureLoader();
 
-
+// Grid configuration
 const gridRows = 3;
 const gridCols = 6;
 const planeWidth = 5;
 const spacing = 6;
 const cornerRadius = 0.5;
 const scaleFactor = 2;
-const shadowOffset = 0.2; 
-const shadowScaleFactor = 0; 
-const shadowOpacity = 0; 
 
-
-const duplicateFactor = 3; 
-const rowSpeeds = [0.01, -0.015, 0.01]; 
+const duplicateFactor = 3;
+const rowSpeeds = [0.01, -0.015, 0.01];
 const totalImagesPerRow = gridCols * duplicateFactor;
 
-
-const shadowTexture = textureLoader.load('/na/shadow.png');
-
-
+// Create row groups for the grid
 const rowGroups = [];
 for (let i = 0; i < gridRows; i++) {
   const group = new THREE.Group();
-  group.position.set(0, i * -10, 0); 
-  group.visible = false; 
-  rowGroups.unshift(group); 
+  group.position.set(0, i * -10, 0);
+  group.visible = false;
+  rowGroups.unshift(group);
   scene.add(group);
 }
 
-
+// Load images and create planes
 for (let i = 1; i <= gridRows * gridCols; i++) {
   const row = Math.floor((i - 1) / gridCols);
   const col = (i - 1) % gridCols;
@@ -94,10 +85,9 @@ for (let i = 1; i <= gridRows * gridCols; i++) {
 
       const geometry = new THREE.ShapeGeometry(roundedRect);
 
-      
+      // Calculate UVs for the geometry
       const uvArray = [];
       const positions = geometry.attributes.position.array;
-
       for (let j = 0; j < positions.length; j += 3) {
         const x = positions[j];
         const y = positions[j + 1];
@@ -105,48 +95,28 @@ for (let i = 1; i <= gridRows * gridCols; i++) {
         const v = (y + (planeHeight * scaleFactor) / 2) / (planeHeight * scaleFactor);
         uvArray.push(u, v);
       }
-
       geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvArray, 2));
 
-      
+      // Create material for the image plane
       const material = new THREE.MeshBasicMaterial({
         map: texture,
         transparent: true,
-        opacity: 0,
+        opacity: 0, // Start fully transparent
+        depthTest: false, // Disable depth testing to avoid rendering issues
+        depthWrite: false, // Disable depth writing
       });
 
       const plane = new THREE.Mesh(geometry, material);
-      plane.name = "Image"; 
+      plane.name = "Image";
 
-      
-      const shadowWidth = planeWidth * scaleFactor * shadowScaleFactor;
-      const shadowHeight = planeHeight * scaleFactor * shadowScaleFactor;
-
-      const shadowGeometry = new THREE.PlaneGeometry(shadowWidth, shadowHeight);
-      const shadowMaterial = new THREE.MeshBasicMaterial({
-        map: shadowTexture,
-        transparent: true,
-        opacity: shadowOpacity,
-      });
-
-      const shadowPlane = new THREE.Mesh(shadowGeometry, shadowMaterial);
-
-      
+      // Add duplicated planes to the row group
       for (let k = 0; k < duplicateFactor; k++) {
         const xOffset = k * gridCols * (planeWidth + spacing);
-        shadowPlane.position.set(
-          col * (planeWidth + spacing) - ((gridCols - 1) * (planeWidth + spacing)) / 2 + shadowOffset + xOffset,
-          -shadowOffset,
-          -0.05
-        );
-
         plane.position.set(
           col * (planeWidth + spacing) - ((gridCols - 1) * (planeWidth + spacing)) / 2 + xOffset,
           0,
           0
         );
-
-        rowGroups[row].add(shadowPlane.clone());
         rowGroups[row].add(plane.clone());
       }
     },
@@ -155,12 +125,11 @@ for (let i = 1; i <= gridRows * gridCols; i++) {
   );
 }
 
-
+// Animation setup
 const animationStartTime = Date.now();
-const rowDelay = 333; 
-const animationDuration = 1500; 
-const bounceDuration = 9000; 
-
+const rowDelay = 333;
+const animationDuration = 1500;
+const bounceDuration = 9000;
 
 function animate() {
   requestAnimationFrame(animate);
@@ -182,13 +151,14 @@ function animate() {
 
       group.children.forEach((child) => {
         if (child.material) {
-          child.material.opacity = easedProgress;
+          child.material.opacity = Math.min(easedProgress, 1); // Clamp opacity to 1
         }
 
-        
+        // Move images horizontally
         const totalWidth = gridCols * (planeWidth + spacing) * duplicateFactor;
         child.position.x += rowSpeeds[index];
 
+        // Wrap images around when they go off-screen
         if (child.position.x > totalWidth / 2) {
           child.position.x -= totalWidth;
         } else if (child.position.x < -totalWidth / 2) {
@@ -203,20 +173,18 @@ function animate() {
 
 animate();
 
-
+// Handle window resize
 window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 });
 
-
-
-
+// Set body height and overflow
 document.body.style.height = `${window.innerHeight * 2.05}px`;
-document.documentElement.style.overflow = "hidden"; 
+document.documentElement.style.overflow = "hidden";
 
-
+// Set up the second scene for mosaics
 const scene2 = new THREE.Scene();
 const camera2 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera2.position.set(-10, 0, 120);
@@ -225,11 +193,11 @@ camera2.rotation.set(0.2, -0.1, -0.1);
 const renderer2 = new THREE.WebGLRenderer({ antialias: true, alpha: false });
 renderer2.setClearColor(0x000000, 0);
 renderer2.domElement.style.position = 'absolute';
-renderer2.domElement.style.top = '100vh'; 
+renderer2.domElement.style.top = '100vh';
 renderer2.domElement.style.left = '0';
 document.body.appendChild(renderer2.domElement);
 
-
+// Resize function for the second canvas
 function resizeCanvas2() {
   const width = window.innerWidth;
   const height = window.innerHeight;
@@ -238,39 +206,33 @@ function resizeCanvas2() {
   camera2.aspect = width / height;
   camera2.updateProjectionMatrix();
 
-  
   renderer2.domElement.style.top = `${window.innerHeight}px`;
-
-  
   document.body.style.height = `${window.innerHeight * 2}px`;
 }
-
 
 resizeCanvas2();
 window.addEventListener("resize", resizeCanvas2);
 
-
+// Mosaic images and configuration
 const images = [
-  '/512art/dream.png',         
-  '/512art/majoras mask.png', 
-  '/512art/desert.png',       
-  '/512art/glass universe.png', 
-  '/512art/gaussian splat.png', 
-  '/512art/flickr.png',       
-  '/512art/morgan.png',       
+  '/512art/dream.png',
+  '/512art/majoras mask.png',
+  '/512art/desert.png',
+  '/512art/glass universe.png',
+  '/512art/gaussian splat.png',
+  '/512art/flickr.png',
+  '/512art/morgan.png',
 ];
 
-
-const imageWidth = 55; 
-const edgeSpacing = 5; 
-
+const imageWidth = 55;
+const edgeSpacing = 5;
 
 const leftMosaicGroup = new THREE.Group();
 const rightMosaicGroup = new THREE.Group();
 scene2.add(leftMosaicGroup);
 scene2.add(rightMosaicGroup);
 
-
+// Function to generate non-adjacent image sequences
 function generateNonAdjacentSequence(imageIndices, repeatCount) {
   let result = [];
   const remaining = [...imageIndices];
@@ -280,7 +242,7 @@ function generateNonAdjacentSequence(imageIndices, repeatCount) {
       const nextImage = remaining[i];
       if (result.length === 0 || result[result.length - 1] !== nextImage) {
         result.push(nextImage);
-        remaining.splice(i, 1); 
+        remaining.splice(i, 1);
         break;
       }
     }
@@ -292,15 +254,14 @@ function generateNonAdjacentSequence(imageIndices, repeatCount) {
   return result;
 }
 
+const leftSequence = generateNonAdjacentSequence([0, 1, 2, 3], 3);
+const rightSequence = generateNonAdjacentSequence([4, 5, 6], 3);
 
-const leftSequence = generateNonAdjacentSequence([0, 1, 2, 3], 3); 
-const rightSequence = generateNonAdjacentSequence([4, 5, 6], 3); 
-
+// Function to add images to the mosaic with equal spacing
 function addImagesToMosaicWithEqualSpacing(mosaicGroup, sequence, xOffset) {
   const textureLoader = new THREE.TextureLoader();
   const imageHeights = [];
 
-  
   const promises = sequence.map((index) => {
     return new Promise((resolve) => {
       textureLoader.load(images[index], (texture) => {
@@ -313,7 +274,6 @@ function addImagesToMosaicWithEqualSpacing(mosaicGroup, sequence, xOffset) {
     });
   });
 
-  
   Promise.all(promises).then((loadedImages) => {
     const totalHeight = imageHeights.reduce((sum, height) => sum + height, 0) + edgeSpacing * (imageHeights.length - 1);
     let startY = totalHeight / 2;
@@ -336,40 +296,39 @@ function addImagesToMosaicWithEqualSpacing(mosaicGroup, sequence, xOffset) {
   });
 }
 
-
 addImagesToMosaicWithEqualSpacing(leftMosaicGroup, leftSequence, -30);
 addImagesToMosaicWithEqualSpacing(rightMosaicGroup, rightSequence, 30);
 
-
+// Subpage links for mosaic images
 const subpageLinks = [
-  "dream.html", 
-  "zelda.html", 
-  "desert.html", 
-  "echoes.html", 
-  "dream.html", 
-  "zelda.html", 
-  "desert.html", 
-  "echoes.html", 
-  "dream.html", 
-  "zelda.html", 
-  "desert.html", 
-  "echoes.html", 
-  "portal.html", 
+  "dream.html",
+  "zelda.html",
+  "desert.html",
+  "echoes.html",
+  "dream.html",
+  "zelda.html",
+  "desert.html",
+  "echoes.html",
+  "dream.html",
+  "zelda.html",
+  "desert.html",
+  "echoes.html",
+  "portal.html",
   "https://www.flickr.com/photos/195552092@N07/albums/72177720313100049/",
-  "morgan.html", 
-  "portal.html", 
+  "morgan.html",
+  "portal.html",
   "https://www.flickr.com/photos/195552092@N07/albums/72177720313100049/",
-  "morgan.html", 
-  "portal.html", 
+  "morgan.html",
+  "portal.html",
   "https://www.flickr.com/photos/195552092@N07/albums/72177720313100049/",
-  "morgan.html"  
+  "morgan.html"
 ];
 
-
+// Raycaster for touch interactions
 const raycaster = new THREE.Raycaster();
 const touchPosition = new THREE.Vector2();
 
-
+// Handle taps in Scene 1
 function handleScene1Tap(event) {
   touchPosition.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
   touchPosition.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
@@ -379,13 +338,13 @@ function handleScene1Tap(event) {
 
   if (intersects.length > 0 && intersects[0].object.name === "Image") {
     window.scrollTo({
-      top: window.innerHeight, 
-      behavior: "smooth", 
+      top: window.innerHeight,
+      behavior: "smooth",
     });
   }
 }
 
-
+// Handle taps in Scene 2
 function handleScene2Tap(event) {
   touchPosition.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
   touchPosition.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
@@ -399,23 +358,22 @@ function handleScene2Tap(event) {
     const imageIndex = allMeshes.findIndex(mesh => mesh === tappedImage);
 
     if (imageIndex !== -1 && subpageLinks[imageIndex]) {
-      window.location.href = subpageLinks[imageIndex]; 
+      window.location.href = subpageLinks[imageIndex];
     }
   }
 }
 
-
+// Add touch event listener
 window.addEventListener("touchstart", (event) => {
   if (window.scrollY < window.innerHeight - 10) {
-    handleScene1Tap(event); 
+    handleScene1Tap(event);
   } else {
-    handleScene2Tap(event); 
+    handleScene2Tap(event);
   }
 });
 
-
+// Animate the mosaics
 function animateMosaics() {
-  
   const rightMosaicHeight = rightMosaicGroup.children.reduce((sum, image) => {
     return sum + image.geometry.parameters.height + edgeSpacing;
   }, -edgeSpacing);
@@ -436,7 +394,6 @@ function animateMosaics() {
     }
   });
 
-  
   const leftMosaicHeight = leftMosaicGroup.children.reduce((sum, image) => {
     return sum + image.geometry.parameters.height + edgeSpacing;
   }, -edgeSpacing);
@@ -457,10 +414,8 @@ function animateMosaics() {
     }
   });
 
-  
   renderer2.render(scene2, camera2);
   requestAnimationFrame(animateMosaics);
 }
-
 
 animateMosaics();
