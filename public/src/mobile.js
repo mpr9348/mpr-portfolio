@@ -38,6 +38,7 @@ camera.rotation.set(0.77, 0.1, 0.09);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setClearColor(0x000000, 0);
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputEncoding = THREE.sRGBEncoding; // Ensure renderer uses sRGB encoding
 document.body.appendChild(renderer.domElement);
 
 const textureLoader = new THREE.TextureLoader();
@@ -72,7 +73,7 @@ for (let i = 1; i <= gridRows * gridCols; i++) {
   textureLoader.load(
     `/homepage images/${i}.png`,
     (texture) => {
-      texture.encoding = THREE.sRGBEncoding;
+      texture.encoding = THREE.sRGBEncoding; // Ensure texture uses sRGB encoding
 
       const aspectRatio = texture.image.width / texture.image.height;
       const planeHeight = planeWidth / aspectRatio;
