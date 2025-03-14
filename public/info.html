@@ -55,18 +55,17 @@
         }
 
         /* Top Right: Title, Email, Phone */
-.title-container {
-    grid-row: 1 / 2;
-    grid-column: 2 / 3;
-    display: flex;
-    flex-direction: column;
-    align-self: flex-end; /* Moves the text down */
-    justify-content: flex-start;
-    text-align: left;
-    margin-top: auto; /* Pushes the text block downward */
-    padding: 20px;
-}
-
+        .title-container {
+            grid-row: 1 / 2;
+            grid-column: 2 / 3;
+            display: flex;
+            flex-direction: column;
+            align-self: flex-end; /* Moves the text down */
+            justify-content: flex-start;
+            text-align: left;
+            margin-top: auto; /* Pushes the text block downward */
+            padding: 20px;
+        }
 
         .title-container h1 {
             font-size: 50px;
@@ -95,6 +94,28 @@
             font-weight: bold;
         }
 
+        /* Download Button */
+        .download-button {
+            margin-top: 20px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-family: 'Bebas Neue', sans-serif;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: #0056b3;
+        }
+
+        .download-button:active {
+            background-color: #004080;
+        }
+
         /* Responsive for smaller screens */
         @media (max-width: 768px) {
             .grid-container {
@@ -111,6 +132,11 @@
             }
 
             .font-info {
+                font-size: 14px;
+            }
+
+            .download-button {
+                padding: 10px 20px;
                 font-size: 14px;
             }
         }
@@ -132,6 +158,11 @@
             
             <!-- Separate element with .book-font class -->
             <p class="book-font font-info">Multimedia artist with an affinity for Video, AI, and 3D. Wants to combine an artistic background with technological practices. Please email or text me if you need my help for a project!</p>
+
+            <!-- Open PDF in New Tab -->
+            <a href="resume.pdf" target="_blank" rel="noopener noreferrer">
+                <button class="download-button">View Resume</button>
+            </a>
         </div>
     </div>
 </body>
