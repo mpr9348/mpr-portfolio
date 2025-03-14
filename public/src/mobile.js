@@ -117,20 +117,6 @@ for (let i = 1; i <= gridRows * gridCols; i++) {
 
       const plane = new THREE.Mesh(geometry, material);
       plane.name = "Image"; 
-
-      
-      const shadowWidth = planeWidth * scaleFactor * shadowScaleFactor;
-      const shadowHeight = planeHeight * scaleFactor * shadowScaleFactor;
-
-      const shadowGeometry = new THREE.PlaneGeometry(shadowWidth, shadowHeight);
-      const shadowMaterial = new THREE.MeshBasicMaterial({
-        map: shadowTexture,
-        transparent: true,
-        opacity: shadowOpacity,
-      });
-
-      const shadowPlane = new THREE.Mesh(shadowGeometry, shadowMaterial);
-
       
       for (let k = 0; k < duplicateFactor; k++) {
         const xOffset = k * gridCols * (planeWidth + spacing);
@@ -146,7 +132,6 @@ for (let i = 1; i <= gridRows * gridCols; i++) {
           0
         );
 
-        rowGroups[row].add(shadowPlane.clone());
         rowGroups[row].add(plane.clone());
       }
     },
