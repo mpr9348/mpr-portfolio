@@ -94,9 +94,15 @@
             font-weight: bold;
         }
 
+        /* Button Container */
+        .button-container {
+            display: flex;
+            gap: 10px; /* Space between buttons */
+            margin-top: 20px;
+        }
+
         /* Download Button */
         .download-button {
-            margin-top: 20px;
             padding: 12px 24px;
             font-size: 16px;
             font-family: 'Bebas Neue', sans-serif;
@@ -106,6 +112,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            flex: 1; /* Allow the button to grow */
         }
 
         .download-button:hover {
@@ -113,6 +120,33 @@
         }
 
         .download-button:active {
+            background-color: #004080;
+        }
+
+        /* Icon Buttons */
+        .icon-button {
+            padding: 12px;
+            font-size: 16px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-button img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .icon-button:hover {
+            background-color: #0056b3;
+        }
+
+        .icon-button:active {
             background-color: #004080;
         }
 
@@ -135,9 +169,15 @@
                 font-size: 14px;
             }
 
-            .download-button {
+            .download-button,
+            .icon-button {
                 padding: 10px 20px;
                 font-size: 14px;
+            }
+
+            .icon-button img {
+                width: 20px;
+                height: 20px;
             }
         }
     </style>
@@ -159,10 +199,27 @@
             <!-- Separate element with .book-font class -->
             <p class="book-font font-info">Multimedia artist with an affinity for Video, AI, and 3D. Wants to combine an artistic background with technological practices. Please email or text me if you need my help for a project!</p>
 
-            <!-- Open PDF in New Tab -->
-            <a href="resume.pdf" target="_blank" rel="noopener noreferrer">
-                <button class="download-button">View Resume</button>
-            </a>
+            <!-- Button Container -->
+            <div class="button-container">
+                <!-- Resume Button -->
+                <a href="resume.pdf" target="_blank" rel="noopener noreferrer">
+                    <button class="download-button">View Resume</button>
+                </a>
+
+                <!-- LinkedIn Button -->
+                <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+                    <button class="icon-button">
+                        <img src="linkedin.svg" alt="LinkedIn">
+                    </button>
+                </a>
+
+                <!-- GitHub Button -->
+                <a href="https://www.github.com" target="_blank" rel="noopener noreferrer">
+                    <button class="icon-button">
+                        <img src="github.svg" alt="GitHub">
+                    </button>
+                </a>
+            </div>
         </div>
     </div>
 </body>
