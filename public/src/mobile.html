@@ -6,23 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Matt Ritter's Portfolio</title>
 
-     <!-- Mobile Device Detection and Redirection -->
-     <script>
-      function isMobileDevice() {
-        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      }
-
-      if (isMobileDevice()) {
-        window.location.href = "/src/mobile.html";
-      }
-    </script>
-
-        <!-- Link to the main JavaScript file -->
-        <script type="module" src="/src/main.js"></script>
-
-    <!-- Include Lottie Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.1/lottie.min.js"></script>
-
     <!-- Link to the CSS file -->
     <link rel="stylesheet" href="/src/style.css" />
   </head>
@@ -42,8 +25,10 @@
     <!-- Three.js Canvas -->
     <canvas id="bg"></canvas>
 
-    <!-- Container for Lottie Animation -->
-    <div id="lottie-animation"></div>
+    <!-- Pulsing Text -->
+    <div id="pulsing-text">Tap an image to scroll down.</div>
 
+    <!-- Link to the main JavaScript file -->
+    <script type="module" src="/src/mobile.js"></script>
   </body>
 </html>
