@@ -53,7 +53,7 @@ const cornerRadius = 0.5;
 const scaleFactor = 2;
 const shadowOffset = 0.2; 
 const shadowScaleFactor = 1.1; 
-const shadowOpacity = 0.4; 
+const shadowOpacity = 0.0; 
 
 
 const duplicateFactor = 3; 
