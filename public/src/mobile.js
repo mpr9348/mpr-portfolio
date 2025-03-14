@@ -188,8 +188,8 @@ document.documentElement.style.overflow = "hidden";
 // Set up the second scene for mosaics
 const scene2 = new THREE.Scene();
 const camera2 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera2.position.set(-10, 0, 120);
-camera2.rotation.set(0.2, -0.1, -0.1);
+camera2.position.set(0, 0, 120);
+camera2.rotation.set(0.0, 0, 0);
 
 const renderer2 = new THREE.WebGLRenderer({ antialias: true, alpha: false });
 renderer2.setClearColor(0x000000, 0);
