@@ -168,21 +168,29 @@ const rowDelay = 333;
 const animationDuration = 1500; 
 const bounceDuration = 9000; 
 
-
-
+// Add a delay variable
+const animationDelay = 300; // 300ms delay
 
 function animate() {
   requestAnimationFrame(animate);
 
   const elapsedTime = Date.now() - animationStartTime;
 
+  // Check if the delay has passed
+  if (elapsedTime < animationDelay) {
+    return; // Exit the function if the delay hasn't passed yet
+  }
+
+  // Adjust elapsed time to account for the delay
+  const adjustedElapsedTime = elapsedTime - animationDelay;
+
   rowGroups.forEach((group, index) => {
     const groupStartTime = index * rowDelay;
 
-    if (elapsedTime > groupStartTime) {
+    if (adjustedElapsedTime > groupStartTime) {
       group.visible = true;
-      const progress = Math.min((elapsedTime - groupStartTime) / animationDuration, 1);
-      const bounceProgress = Math.min((elapsedTime - groupStartTime) / bounceDuration, 1);
+      const progress = Math.min((adjustedElapsedTime - groupStartTime) / animationDuration, 1);
+      const bounceProgress = Math.min((adjustedElapsedTime - groupStartTime) / bounceDuration, 1);
       const easedProgress = 1 - Math.pow(1 - progress, 3);
       const bounceEffect = Math.pow(0.9, bounceProgress * 3) * Math.sin(bounceProgress * 5 * Math.PI) * 0.01;
 
@@ -194,7 +202,6 @@ function animate() {
           child.material.opacity = easedProgress;
         }
 
-        
         const totalWidth = gridCols * (planeWidth + spacing) * duplicateFactor;
         child.position.x += rowSpeeds[index];
 
@@ -207,9 +214,7 @@ function animate() {
     }
   });
 
-  
-  if (elapsedTime > hoverStartTime) {
-    
+  if (adjustedElapsedTime > hoverStartTime) {
     if (window.scrollY >= window.innerHeight - 10) return;
 
     raycaster.setFromCamera(mouse, camera);
@@ -217,12 +222,12 @@ function animate() {
 
     if (intersects.length > 0 && intersects[0].object.name === "Image") {
       if (intersectedObject !== intersects[0].object) {
-        if (intersectedObject) intersectedObject.scale.set(1, 1, 1); 
+        if (intersectedObject) intersectedObject.scale.set(1, 1, 1);
         intersectedObject = intersects[0].object;
         intersectedObject.scale.set(scaleFactorOnHover, scaleFactorOnHover, 1);
       }
     } else if (intersectedObject) {
-      intersectedObject.scale.set(1, 1, 1); 
+      intersectedObject.scale.set(1, 1, 1);
       intersectedObject = null;
     }
   }
@@ -233,8 +238,8 @@ function animate() {
 
     if (intersects.length > 0 && intersects[0].object.name === "Image") {
       window.scrollTo({
-        top: window.innerHeight, 
-        behavior: "smooth", 
+        top: window.innerHeight,
+        behavior: "smooth",
       });
     }
   });
