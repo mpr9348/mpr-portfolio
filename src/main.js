@@ -163,86 +163,88 @@ for (let i = 1; i <= gridRows * gridCols; i++) {
 }
 
 
-const animationStartTime = Date.now();
-const rowDelay = 333; 
-const animationDuration = 1500; 
-const bounceDuration = 9000; 
+// Array of image paths in /512art/
+const imagePaths = [
+  '/512art/dream.png',
+  '/512art/majoras mask.png',
+  '/512art/desert.png',
+  '/512art/glass universe.png',
+  '/512art/gaussian splat.png',
+  '/512art/flickr.png',
+  '/512art/morgan.png',
+];
 
-
-
-
-function animate() {
-  requestAnimationFrame(animate);
-
-  const elapsedTime = Date.now() - animationStartTime;
-
-  rowGroups.forEach((group, index) => {
-    const groupStartTime = index * rowDelay;
-
-    if (elapsedTime > groupStartTime) {
-      group.visible = true;
-      const progress = Math.min((elapsedTime - groupStartTime) / animationDuration, 1);
-      const bounceProgress = Math.min((elapsedTime - groupStartTime) / bounceDuration, 1);
-      const easedProgress = 1 - Math.pow(1 - progress, 3);
-      const bounceEffect = Math.pow(0.9, bounceProgress * 3) * Math.sin(bounceProgress * 5 * Math.PI) * 0.01;
-
-      group.rotation.y = THREE.MathUtils.lerp(Math.PI / 3, 0, easedProgress) + bounceEffect;
-      group.position.z = THREE.MathUtils.lerp(0, -50, easedProgress) + bounceEffect;
-
-      group.children.forEach((child) => {
-        if (child.material) {
-          child.material.opacity = easedProgress;
-        }
-
-        
-        const totalWidth = gridCols * (planeWidth + spacing) * duplicateFactor;
-        child.position.x += rowSpeeds[index];
-
-        if (child.position.x > totalWidth / 2) {
-          child.position.x -= totalWidth;
-        } else if (child.position.x < -totalWidth / 2) {
-          child.position.x += totalWidth;
-        }
+// Function to preload images
+function preloadImages(imagePaths) {
+  return Promise.all(
+    imagePaths.map((path) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = path;
+        img.onload = () => resolve(path);
+        img.onerror = () => reject(`Failed to load image: ${path}`);
       });
-    }
-  });
-
-  
-  if (elapsedTime > hoverStartTime) {
-    
-    if (window.scrollY >= window.innerHeight - 10) return;
-
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(scene.children, true);
-
-    if (intersects.length > 0 && intersects[0].object.name === "Image") {
-      if (intersectedObject !== intersects[0].object) {
-        if (intersectedObject) intersectedObject.scale.set(1, 1, 1); 
-        intersectedObject = intersects[0].object;
-        intersectedObject.scale.set(scaleFactorOnHover, scaleFactorOnHover, 1);
-      }
-    } else if (intersectedObject) {
-      intersectedObject.scale.set(1, 1, 1); 
-      intersectedObject = null;
-    }
-  }
-
-  window.addEventListener("click", (event) => {
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(scene.children, true);
-
-    if (intersects.length > 0 && intersects[0].object.name === "Image") {
-      window.scrollTo({
-        top: window.innerHeight, 
-        behavior: "smooth", 
-      });
-    }
-  });
-
-  renderer.render(scene, camera);
+    })
+  );
 }
 
-animate();
+// Preload images and start animation after all images are cached
+preloadImages(imagePaths)
+  .then(() => {
+    console.log('All images are cached. Starting animation...');
+    startAnimation(); // Start the animation after images are loaded
+  })
+  .catch((error) => {
+    console.error('Error preloading images:', error);
+  });
+
+// Function to start the animation
+function startAnimation() {
+  const animationStartTime = Date.now();
+  const rowDelay = 333; // Delay between rows
+  const animationDuration = 1500; // Duration of the animation
+  const bounceDuration = 9000; // Duration of the bounce effect
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    const elapsedTime = Date.now() - animationStartTime;
+
+    rowGroups.forEach((group, index) => {
+      const groupStartTime = index * rowDelay;
+
+      if (elapsedTime > groupStartTime) {
+        group.visible = true;
+        const progress = Math.min((elapsedTime - groupStartTime) / animationDuration, 1);
+        const bounceProgress = Math.min((elapsedTime - groupStartTime) / bounceDuration, 1);
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+        const bounceEffect = Math.pow(0.9, bounceProgress * 3) * Math.sin(bounceProgress * 5 * Math.PI) * 0.01;
+
+        group.rotation.y = THREE.MathUtils.lerp(Math.PI / 3, 0, easedProgress) + bounceEffect;
+        group.position.z = THREE.MathUtils.lerp(0, -50, easedProgress) + bounceEffect;
+
+        group.children.forEach((child) => {
+          if (child.material) {
+            child.material.opacity = easedProgress;
+          }
+
+          const totalWidth = gridCols * (planeWidth + spacing) * duplicateFactor;
+          child.position.x += rowSpeeds[index];
+
+          if (child.position.x > totalWidth / 2) {
+            child.position.x -= totalWidth;
+          } else if (child.position.x < -totalWidth / 2) {
+            child.position.x += totalWidth;
+          }
+        });
+      }
+    });
+
+    renderer.render(scene, camera);
+  }
+
+  animate(); // Start the animation loop
+}
 
 function loadLottieAnimation() {
   const animationContainer = document.getElementById('lottie-animation');
