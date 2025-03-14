@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me</title>
+    <link rel="stylesheet" href="../src/style.css">
+    
+    <style>
+        /* Global Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Bebas Neue', sans-serif;
+            font-weight: normal;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #f4f4f4;
+        }
+
+        .grid-container {
+            display: grid;
+            width: 80vw;
+            max-width: 900px;
+            height: 80vw; /* Maintain square shape */
+            max-height: 900px;
+            grid-template-columns: 1fr 1fr; /* Left 50%, Right 50% */
+            grid-template-rows: 1fr 1fr; /* Two equal rows */
+            gap: 10px;
+            padding: 20px;
+        }
+
+        /* Left Side: Image */
+        .image-container {
+            grid-row: 1 / 3; /* Span both rows */
+            grid-column: 1 / 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        /* Top Right: Title, Email, Phone */
+.title-container {
+    grid-row: 1 / 2;
+    grid-column: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end; /* Moves the text down */
+    justify-content: flex-start;
+    text-align: left;
+    margin-top: auto; /* Pushes the text block downward */
+    padding: 20px;
+}
+
+
+        .title-container h1 {
+            font-size: 50px;
+            margin-bottom: 5px;
+        }
+
+        .title-container p {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        /* Separate Font Info */
+        .font-info {
+            margin-top: 10px;
+        }
+
+        /* Name Link in Corner */
+        .name-link {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 18px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        /* Responsive for smaller screens */
+        @media (max-width: 768px) {
+            .grid-container {
+                width: 130vw;
+                height: 90vw;
+            }
+
+            .title-container h1 {
+                font-size: 40px;
+            }
+
+            .title-container p {
+                font-size: 16px;
+            }
+
+            .font-info {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="name-link">Matt Ritter</a>
+
+    <div class="grid-container">
+        <!-- Left: Image -->
+        <div class="image-container">
+            <img src="portfolio img/selfie.jpg" alt="About Me">
+        </div>
+
+        <!-- Top Right: Title, Email, Phone -->
+        <div class="title-container">
+            <h1>Matt Ritter</h1>
+            <p>mpr9348@nyu.edu<br>(415) 849-8585</p>
+            
+            <!-- Separate element with .book-font class -->
+            <p class="book-font font-info">Multimedia artist with an affinity for Video, AI, and 3D. Wants to combine an artistic background with technological practices. Please email or text me if you need my help for a project!</p>
+        </div>
+    </div>
+</body>
+</html>

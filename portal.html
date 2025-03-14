@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal</title>
+    <link rel="stylesheet" href="../src/style.css">
+
+    <style>
+      body {
+        font-family: 'Bebas Neue', sans-serif;
+        font-weight: normal;
+        margin-bottom: 0;
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .name-link {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 18px;
+        margin-bottom:0px;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+      }
+
+      .video-container {
+        position: relative;
+        width: 80%;
+        max-width: 800px;
+        aspect-ratio: 1 / 1;
+        margin-top: 0px;
+      }
+
+      .video-container iframe {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        border: none;
+      }
+
+      .title-container {
+        width: 80%;
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* Right-aligns the content */
+        margin-bottom: 10px; /* Space between title and video */
+        margin-top:40px;
+      }
+
+      h1 {
+        font-size: 100px;
+        font-weight: bold;
+        margin: 0;
+        margin-top: 30px;
+      }
+
+      p {
+        font-size: 40px;
+        color: #444;
+        margin: 0;
+        margin-top: -20px;
+      }
+
+      .text-container {
+        display: flex;
+        justify-content: space-between;
+        width: 80%;
+        max-width: 800px;
+        margin-top: 0px;
+        margin-bottom: 30px;
+      }
+
+      .text-box {
+        width: 45%;
+        font-size: 20px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="name-link">Matt Ritter</a>
+
+    <div class="title-container">
+      <h1>Portal</h1>
+      <p>Spring 2024</p>
+    </div>
+
+    <div class="video-container">
+      <iframe 
+        src="https://www.youtube.com/embed/LvNOhNhSw18?si=fk_t0RKAWWxbd3QM" 
+        title="YouTube video player" 
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <!-- New Image Container -->
+    <div class="image-container">
+      <img src="portfolio img/portal subimage 2.png" alt="Image 1">
+      <img src="portfolio img/portal subimage 1.jpg" alt="Image 2">
+    </div>
+
+
+
+    <div class="text-container">
+      <div class="text-box left-text">
+        Software/Materials Used:<br>
+        <span class="book-font">Blender, After Effects, Yuzu, Neon</span>
+      </div>
+      <div class="text-box right-text">
+        I created this video using Gaussian Splatting methods -- this would not have been possible without the research by Bernhard Kerbl, Georgios Kopanas, Thomas Leimkühler, and George Drettakkis. I also constructed a "portal" with neon tubes, and this video is meant to be played inside of it.
+      </div>
+    </div>
+  </body>
+</html>

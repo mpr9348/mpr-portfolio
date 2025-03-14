@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desert</title>
+    <link rel="stylesheet" href="../src/style.css">
+
+    <style>
+      body {
+        font-family: 'Bebas Neue', sans-serif;
+        font-weight: normal;
+        margin: 0;
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        overflow: hidden; /* Prevent scrolling */
+      }
+
+      .name-link {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 18px;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+      }
+
+      .image-container {
+        position: relative;
+        width: 80%;
+        max-width: 800px;
+        aspect-ratio: 16 / 9;
+        margin-top: 70px;
+      }
+
+      .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .title-container {
+        width: 80%;
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* Right-aligns the content */
+        margin-bottom: -60px; /* Adjusted spacing to move it up */
+        text-align: right; /* Ensures text inside is also right-aligned */
+        margin-top:10px;
+      }
+
+      h1 {
+        font-size: 100px;
+        font-weight: bold;
+        margin: 0;
+        margin-top: 70px;
+        line-height: 90px;
+      }
+
+      p {
+        font-size: 40px;
+        color: #444;
+        margin: 0;
+        margin-top: -10px;
+      }
+
+      .text-container {
+        display: flex;
+        justify-content: space-between;
+        width: 80%;
+        max-width: 800px;
+        margin-top: 0px;
+      }
+
+      .text-box {
+        width: 45%;
+        font-size: 20px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="name-link">Matt Ritter</a>
+
+    <div class="title-container">
+      <h1>Desert Town</h1>
+      <p>Fall 2021</p>
+    </div>
+
+    <div class="image-container">
+      <img src="portfolio img/desert.jpg" alt="Desert Scene">
+    </div>
+
+    <div class="text-container">
+      <div class="text-box left-text">
+        Software Used:<br>
+        <span class="book-font">Cinema 4D, Photoshop</span>
+      </div>
+      <div class="text-box right-text">
+        
+      </div>
+    </div>
+  </body>
+</html>
