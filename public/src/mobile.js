@@ -251,7 +251,7 @@ window.addEventListener("resize", resizeCanvas2);
 
 
 const images = [
-  '/public/512art/dream.png',         
+  '/512art/dream.png',         
   '/512art/majoras mask.png', 
   '/512art/desert.png',       
   '/512art/glass universe.png', 
