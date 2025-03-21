@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const gap = 20; 
   const scrollSpeed = 0.2; 
 
-  const topImages = Array.from({ length: totalImagesPerRow }, (_, i) => `/portal images/${i + 1}.png`);
-  const bottomImages = Array.from({ length: totalImagesPerRow }, (_, i) => `/portal images/${i + 7}.png`); 
+  const topImages = Array.from({ length: totalImagesPerRow }, (_, i) => `/portal images/${i + 1}.webp`);
+  const bottomImages = Array.from({ length: totalImagesPerRow }, (_, i) => `/portal images/${i + 7}.webp`); 
 
   function createImageElement(src) {
     const img = document.createElement("img");

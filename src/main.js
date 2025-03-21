@@ -61,7 +61,7 @@ const rowSpeeds = [0.01, -0.015, 0.01];
 const totalImagesPerRow = gridCols * duplicateFactor;
 
 
-const shadowTexture = textureLoader.load('/shadow.png');
+const shadowTexture = textureLoader.load('/shadow.webp');
 
 
 const rowGroups = [];
@@ -86,7 +86,7 @@ for (let i = 1; i <= gridRows * gridCols; i++) {
   const col = (i - 1) % gridCols;
 
   textureLoader.load(
-    `/homepage images/${i}.png`,
+    `/homepage images/${i}.webp`,
     (texture) => {
       texture.encoding = THREE.sRGBEncoding;
 
@@ -158,7 +158,7 @@ for (let i = 1; i <= gridRows * gridCols; i++) {
       }
     },
     undefined,
-    (err) => console.error(`Error loading texture ${i}.png`, err)
+    (err) => console.error(`Error loading texture ${i}.webp`, err)
   );
 }
 
@@ -372,13 +372,13 @@ window.addEventListener("resize", resizeCanvas2);
 
 
 const images = [
-  '/512art/dream.png',         
-  '/512art/majoras mask.png', 
-  '/512art/desert.png',       
-  '/512art/glass universe.png', 
-  '/512art/gaussian splat.png', 
-  '/512art/flickr.png',       
-  '/512art/morgan.png',       
+  '/512art/dream.webp',         
+  '/512art/majoras mask.webp', 
+  '/512art/desert.webp',       
+  '/512art/glass universe.webp', 
+  '/512art/gaussian splat.webp', 
+  '/512art/flickr.webp',       
+  '/512art/morgan.webp',       
 ];
 
 
